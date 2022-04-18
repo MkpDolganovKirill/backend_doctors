@@ -1,8 +1,9 @@
 const db = require('../../db/database');
-const crypto = require('crypto');
+const bcrypt = require('bcrypt');
+const salt = bcrypt.genSaltSync(15);
 
 const hash = (password) => {
-  const hashPass = crypto.createHash('sha256').update(password).digest('base64');
+  const hashPass = bcrypt.hashSync(password, salt);
   return hashPass;
 } 
 
