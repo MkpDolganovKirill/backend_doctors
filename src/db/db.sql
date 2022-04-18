@@ -1,7 +1,7 @@
 create table users (
 	Id serial primary key,
 	login varchar(50) not null,
-	password varchar(50) not null
+	password varchar(255) not null
 );
 
 create table doctors (

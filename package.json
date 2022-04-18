@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/MkpDolganovKirill/backend_doctors#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.3",
     "nodemon": "^2.0.15",
