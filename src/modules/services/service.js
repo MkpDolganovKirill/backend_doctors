@@ -15,8 +15,7 @@ module.exports.hash = (password) => {
 };
 
 module.exports.authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization']
-  const token = authHeader && authHeader.split(' ')[1];
+  const token = req.headers.accesstoken;
   if (token == null) return res.status(401).send("User don't authenticate");
 
   jwt.verify(token, process.env.TOKEN, (err, user) => {
