@@ -47,3 +47,22 @@ module.exports.addNewOrder = async (req, res) => {
     return res.status(422).send({ error, message: 'Error! Params not correct!' });
   };
 };
+
+module.exports.updateUserOrder = async (req, res) => {
+  try {
+    const user = req.user;
+    const { id, fullname, ordersdate, complaints, doctorid } = req.body;
+    if (!(user && id && fullname && ordersdate && complaints && doctorid))
+      return res.status(422).send('Error! Params not found!');
+    const result = await db.query(`UPDATE orders SET 
+      fullname = '${fullname}', 
+      ordersdate = '${ordersdate}', 
+      complaints = '${complaints}', 
+      doctorid = ${doctorid} 
+      WHERE id = ${id} RETURNING *`
+    );
+    return res.send(result.rows[0]);
+  } catch (error) {
+    return res.status(422).send({ error, message: 'Error! Params not correct!' });
+  };
+};
