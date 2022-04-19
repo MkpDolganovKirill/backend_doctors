@@ -6,8 +6,8 @@ dotenv.config();
 
 const salt = bcrypt.genSaltSync(15);
 
-const generateAccessToken = (person) => {
-  return jwt.sign(person, process.env.TOKEN);
+const generateAccessToken = (user) => {
+  return jwt.sign(user, process.env.TOKEN);
 }
 
 const hash = (password) => {
