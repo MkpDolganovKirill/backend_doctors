@@ -72,7 +72,7 @@ module.exports.deleteUsersOrder = async (req, res) => {
     const user = req.user;
     const id = req.query.id;
     if (!(user && id)) return res.status(422).send('Error! Params not found!');
-    const result = await db.query(`DELETE FROM orders WHERE id = ${id}; `)
+    const result = await db.query(`DELETE FROM orders WHERE id = ${id}; `);
     return result.rowCount ? res.send('Task deleted!') : res.status(404).send('Task not found');
   } catch (error) {
     return res.status(422).send({ error, message: 'Error! Params not correct!' });
