@@ -5,9 +5,8 @@ dotenv.config();
 
 module.exports.getAllUserOrders = async (req, res) => {
   try {
-    const gettingToken = req.query.token;
-    if (!gettingToken) return res.status(422).send('Error! Params not found!');
-    const user = jwt.verify(gettingToken, process.env.TOKEN);
+    const user = req.user;
+    if (!user) return res.status(422).send('Error! Params not found!');
     const result = await db.query(`SELECT * FROM orders WHERE usersid = ${user.id}`);
     res.send(result.rows);
   } catch (error) {
