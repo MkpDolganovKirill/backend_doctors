@@ -1,19 +1,6 @@
 const db = require('../../db/database');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
-dotenv.config();
-
-const salt = bcrypt.genSaltSync(15);
-
-const generateAccessToken = (user) => {
-  return jwt.sign(user, process.env.TOKEN);
-}
-
-const hash = (password) => {
-  const hashPass = bcrypt.hashSync(password, salt);
-  return hashPass;
-} 
+const { generateAccessToken, hash } = require('../services/service');
 
 module.exports.createNewUser = async (req, res) => {
   try {
@@ -24,8 +11,8 @@ module.exports.createNewUser = async (req, res) => {
     res.send({ token: token });
   } catch (error) {
     return res.status(422).send({ error, message: 'Error! Params not correct!' });
-  }
-}
+  };
+};
 
 module.exports.authorizationUser = async (req, res) => {
   try {
@@ -38,8 +25,8 @@ module.exports.authorizationUser = async (req, res) => {
       res.send({ token: token });
     } else {
       res.status(404).send('Invalid username or password!');
-    }
+    };
   } catch (error) {
     return res.status(422).send({ error, message: 'Error! Params not correct!' });
-  }
-}
+  };
+};
