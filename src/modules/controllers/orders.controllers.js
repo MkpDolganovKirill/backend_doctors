@@ -2,6 +2,15 @@ const db = require('../../db/database');
 const dotenv = require('dotenv');
 dotenv.config();
 
+module.exports.getAllDoctors = async (req, res) => {
+  try {
+    const result = await db.query('SELECT * FROM doctors');
+    return res.send(result.rows);
+  } catch (error) {
+    return res.status(422).send({ error, message: 'Error! Params not correct!' });
+  };
+};
+
 module.exports.getAllUserOrders = async (req, res) => {
   try {
     const user = req.user;
