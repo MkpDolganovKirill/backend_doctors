@@ -22,7 +22,7 @@ module.exports.authorizationUser = async (req, res) => {
     const user = result.rows[0];
     if (bcrypt.compareSync(password, user.password)) {
       const token = generateAccessToken({ id: user.id });
-      return res.send({ token: token });
+      return res.send({ token });
     } else {
       return res.status(404).send('Invalid username or password!');
     };
