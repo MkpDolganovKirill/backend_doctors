@@ -11,7 +11,7 @@ create table doctors (
 
 create table orders (
 	Id serial primary key,
-	fullName varchar(50) not null,
+	patient varchar(50) not null,
 	ordersDate date not null,
 	complaints text not null,
 	usersId integer references users (Id),
