@@ -1,4 +1,3 @@
-const db = require('../../db/database');
 const bcrypt = require('bcryptjs');
 const { generateAccessToken } = require('../middleware/generateTokens.middleware');
 const { createUser, authUser } = require('../../db/requests');
