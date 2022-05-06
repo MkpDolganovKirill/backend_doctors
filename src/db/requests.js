@@ -26,13 +26,6 @@ module.exports.createNewDoctorRequest = async (fullname) => {
 
 /* Orders requests */
 module.exports.getAllUserOrdersRequest = async (user, sortMethod, sortType, dateWith, dateFor) => {
-  // const orders = await db.query(`
-  //   select orders.*, doctors.fullname 
-  //   from orders, doctors 
-  //   where usersid = ${user.id} and doctorid = doctors.id and ordersdate between '${dateWith}' and '${dateFor}'
-  //   order by ${sortMethod} ${sortType}, ordersdate ASC`
-  // );
-  // return orders;
   let arr = []
   sortMethod === 'doctor' ? arr = [sortMethod, `fullname`, sortType] : arr = [sortMethod, sortType];
   const result = await Order.findAll({

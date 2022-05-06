@@ -41,10 +41,10 @@ module.exports.getAllUserOrders = async (req, res) => {
 module.exports.addNewOrder = async (req, res) => {
   try {
     const user = req.user;
-    const { patient, ordersdate, complaints, doctorid } = req.body;
-    if (!(user && patient && ordersdate && complaints && doctorid))
+    const { patient, ordersdate, complaints, doctorId } = req.body;
+    if (!(user && patient && ordersdate && complaints && doctorId))
       return res.status(422).send('Error! Params not found!');
-    const result = await addNewOrderRequest(patient, ordersdate, complaints, user, doctorid);
+    const result = await addNewOrderRequest(patient, ordersdate, complaints, user, doctorId);
     return res.send(result);
   } catch (error) {
     return res.status(422).send({ error, message: 'Error! Params not correct!' });
@@ -54,10 +54,10 @@ module.exports.addNewOrder = async (req, res) => {
 module.exports.updateUserOrder = async (req, res) => {
   try {
     const user = req.user;
-    const { id, patient, ordersdate, complaints, doctorid } = req.body;
-    if (!(user && id && patient && ordersdate && complaints && doctorid))
+    const { id, patient, ordersdate, complaints, doctorId } = req.body;
+    if (!(user && id && patient && ordersdate && complaints && doctorId))
       return res.status(422).send('Error! Params not found!');
-    const result = await updateUserOrderRequest(patient, ordersdate, complaints, doctorid, id);
+    const result = await updateUserOrderRequest(patient, ordersdate, complaints, doctorId, id);
     return result ? res.send('Order update!') : res.status(404).send('Order not found!');
   } catch (error) {
     return res.status(422).send({ error, message: 'Error! Params not correct!' });
@@ -70,7 +70,6 @@ module.exports.deleteUsersOrder = async (req, res) => {
     const id = req.query.id;
     if (!(user && id)) return res.status(422).send('Error! Params not found!');
     const result = await deleteUsersOrderRequest(id);
-    console.log(result);
     return result ? res.send('Order deleted!') : res.status(404).send('Order not found');
   } catch (error) {
     return res.status(422).send({ error, message: 'Error! Params not correct!' });
