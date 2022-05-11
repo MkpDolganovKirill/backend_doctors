@@ -13,6 +13,26 @@ module.exports.authUser = async (login) => {
   return result;
 };
 
+module.exports.getUserById = async (id) => {
+  const result = await User.findOne({ where: { id } });
+  return result;
+}
+
+/* Work with tokens requests */
+module.exports.updateUsersRefreshToken = async (id, refreshtoken) => {
+  const result = await User.update({ refreshtoken }, {
+    where: { id }
+  });
+  return result;
+};
+
+module.exports.deleteUsersRefreshToken = async (id) => {
+  const result = await User.update({ refreshtoken: null }, {
+    where: { id }
+  });
+  return result;
+}
+
 /* Doctors requests */
 module.exports.getAllDoctorsRequest = async () => {
   const result = await Doctor.findAll();
