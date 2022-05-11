@@ -8,7 +8,7 @@ module.exports.createNewUser = async (req, res) => {
     if (!(login && password)) return res.status(422).send('Error! Params not found!');
     const user = await createUser(login, password);
     const token = generateAccessToken({ id: user.id });
-    return res.send({ token: token });
+    return res.status(200).send({ token: token });
   } catch (error) {
     return res.status(422).send({ error, message: 'Error! Params not correct!' });
   };
@@ -21,7 +21,7 @@ module.exports.authorizationUser = async (req, res) => {
     const user = await authUser(login);
     if (bcrypt.compare(password, user.password)) {
       const token = generateAccessToken({ id: user.id });
-      return res.send({ token });
+      return res.status(200).send({ token });
     } else {
       return res.status(404).send('Invalid username or password!');
     };

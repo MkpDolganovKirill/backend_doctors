@@ -17,6 +17,4 @@ const Doctor = sequelize.define('doctors', {
   freezeTableName: true
 });
 
-
-
 module.exports = Doctor;

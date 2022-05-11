@@ -14,7 +14,7 @@ module.exports.createNewDoctor = async (req, res) => {
     const { fullname } = req.body;
     if (!fullname) return res.status(422).send('Error! Params not found!');
     const doctor = await createNewDoctorRequest(fullname);
-    return res.send({ doctor });
+    return res.status(200).send({ doctor });
   } catch (e) {
     return res.status(422).send({ error, message: 'Error! Params not correct!' });
   }
@@ -45,7 +45,7 @@ module.exports.addNewOrder = async (req, res) => {
     if (!(user && patient && ordersdate && complaints && doctorId))
       return res.status(422).send('Error! Params not found!');
     const result = await addNewOrderRequest(patient, ordersdate, complaints, user, doctorId);
-    return res.send(result);
+    return res.status(200).send(result);
   } catch (error) {
     return res.status(422).send({ error, message: 'Error! Params not correct!' });
   };
@@ -58,7 +58,7 @@ module.exports.updateUserOrder = async (req, res) => {
     if (!(user && id && patient && ordersdate && complaints && doctorId))
       return res.status(422).send('Error! Params not found!');
     const result = await updateUserOrderRequest(patient, ordersdate, complaints, doctorId, id);
-    return result ? res.send('Order update!') : res.status(404).send('Order not found!');
+    return result ? res.status(200).send('Order update!') : res.status(404).send('Order not found!');
   } catch (error) {
     return res.status(422).send({ error, message: 'Error! Params not correct!' });
   };
@@ -70,7 +70,7 @@ module.exports.deleteUsersOrder = async (req, res) => {
     const id = req.query.id;
     if (!(user && id)) return res.status(422).send('Error! Params not found!');
     const result = await deleteUsersOrderRequest(id);
-    return result ? res.send('Order deleted!') : res.status(404).send('Order not found');
+    return result ? res.status(200).send('Order deleted!') : res.status(404).send('Order not found');
   } catch (error) {
     return res.status(422).send({ error, message: 'Error! Params not correct!' });
   };
