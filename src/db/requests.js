@@ -1,60 +1,64 @@
-const db = require('./database');
 const { hash } = require('../modules/services/service');
+const { User, Doctor, Order } = require('./database');
+const { Op } = require('sequelize');
 
+/* Users requests */
 module.exports.createUser = async (login, password) => {
-  const user = await db.query(`INSERT INTO users (login, password) values ('${login}', '${hash(password)}') RETURNING *`);
-  return user.rows[0];
+  const result = await User.create({ login, password: hash(password) });
+  return result;
 };
 
 module.exports.authUser = async (login) => {
-  const user = await db.query(`SELECT * FROM users WHERE login='${login}'`);
-  return user.rows[0];
+  const result = await User.findOne({ where: { login } });
+  return result;
 };
 
+/* Doctors requests */
 module.exports.getAllDoctorsRequest = async () => {
-  const doctors = await db.query(`SELECT * FROM doctors`);
-  return doctors.rows;
+  const result = await Doctor.findAll();
+  return result;
 };
 
-module.exports.getAllUsersRequest = async (user, sortMethod, sortType, dateWith, dateFor) => {
-  const orders = await db.query(`
-    select orders.*, doctors.fullname 
-    from orders, doctors 
-    where usersid = ${user.id} and doctorid = doctors.id and ordersdate between '${dateWith}' and '${dateFor}'
-    order by ${sortMethod} ${sortType}, ordersdate ASC`
-  );
-  return orders;
+module.exports.createNewDoctorRequest = async (fullname) => {
+  const result = await Doctor.create({ fullname });
+  return result;
+}
+
+/* Orders requests */
+module.exports.getAllUserOrdersRequest = async (user, sortMethod, sortType, dateWith, dateFor) => {
+  let arr = []
+  sortMethod === 'doctor' ? arr = [sortMethod, `fullname`, sortType] : arr = [sortMethod, sortType];
+  const result = await Order.findAll({
+    where: {
+      userId: user.id,
+      ordersdate: {
+        [Op.between]: [dateWith, dateFor]
+      }
+    },
+    order: [
+      arr, [`ordersdate`, `asc`]
+    ],
+    include: {
+      model: Doctor,
+      attributes: ['fullname']
+    }
+  });
+  return result;
 };
 
-module.exports.addNewOrderRequest = async (patient, ordersdate, complaints, user, doctorid) => {
-  const result = await db.query(`INSERT INTO orders 
-    (
-      patient, 
-      ordersdate, 
-      complaints, 
-      usersid, 
-      doctorid
-      ) values (
-        '${patient}', 
-        '${ordersdate}', 
-        '${complaints}', 
-        ${user.id}, 
-        ${doctorid}
-      ) RETURNING *`);
-  return result.rows[0];
+module.exports.addNewOrderRequest = async (patient, ordersdate, complaints, user, doctorId) => {
+  const result = Order.create({ patient, ordersdate, complaints, userId: user.id, doctorId });
+  return result;
 };
 
-module.exports.updateUserOrderRequest = async (patient, ordersdate, complaints, doctorid, id) => {
-  const result = await db.query(`UPDATE orders SET 
-      patient = '${patient}', 
-      ordersdate = '${ordersdate}', 
-      complaints = '${complaints}', 
-      doctorid = ${doctorid} 
-      WHERE id = ${id} RETURNING *`
-  );
-  return result.rows[0];
+module.exports.updateUserOrderRequest = async (patient, ordersdate, complaints, doctorId, id) => {
+  const result = await Order.update({ patient, ordersdate, complaints, doctorId }, {
+    where: { id }
+  });
+  return result;
 };
 
 module.exports.deleteUsersOrderRequest = async (id) => {
-  return await db.query(`DELETE FROM orders WHERE id = ${id}; `);
-}
+  const result = await Order.destroy({ where: { id } });
+  return result;
+};
