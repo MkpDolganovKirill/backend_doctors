@@ -19,7 +19,7 @@ module.exports.authorizationUser = async (req, res) => {
     const { login, password } = req.body;
     if (!(login && password)) return res.status(422).send('Error! Params not found!');
     const user = await authUser(login);
-    if (bcrypt.compareSync(password, user.password)) {
+    if (bcrypt.compare(password, user.password)) {
       const token = generateAccessToken({ id: user.id });
       return res.send({ token });
     } else {
