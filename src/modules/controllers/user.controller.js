@@ -1,6 +1,9 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
 const { generateAccessToken, generateRefreshToken } = require('../middleware/generateTokens.middleware');
-const { createUser, authUser, updateUsersRefreshToken } = require('../../db/requests');
+const { createUser, authUser, updateUsersRefreshToken, deleteUsersRefreshToken } = require('../../db/requests');
 
 module.exports.createNewUser = async (req, res) => {
   try {
@@ -31,5 +34,16 @@ module.exports.authorizationUser = async (req, res) => {
     };
   } catch (error) {
     return res.status(422).send({ error, message: 'Error! Params not correct!' });
+  };
+};
+
+module.exports.deleteRefreshToken = (req, res) => {
+  try {
+    const token = req.headers.accesstoken;
+    const data = jwt.decode(token);
+    deleteUsersRefreshToken(data.id);
+    return res.status(200).send('Token deleted');
+  } catch (err) {
+    return res.status(422).send({ err, message: 'Token can not delete' });
   };
 };
