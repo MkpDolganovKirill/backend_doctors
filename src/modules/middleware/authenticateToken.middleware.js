@@ -23,7 +23,6 @@ module.exports.authenticateToken = (req, res, next) => {
             };
             const accesstokenNew = generateAccessToken({ id: user.id });
             const refreshtokenNew = generateRefreshToken({ id: user.id });
-            console.log('user.id', user.id);
             updateUsersRefreshToken(user.id, refreshtokenNew);
             res.status(203).send({ accesstoken: accesstokenNew, refreshtoken: refreshtokenNew });
           });
@@ -31,7 +30,6 @@ module.exports.authenticateToken = (req, res, next) => {
           res.status(403).send("Tokens not validate");
         };
       } else {
-        console.log({ ...user });
         req.user = user;
 
         next();
