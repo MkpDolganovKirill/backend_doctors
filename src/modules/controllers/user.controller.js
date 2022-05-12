@@ -39,9 +39,8 @@ module.exports.authorizationUser = async (req, res) => {
 
 module.exports.deleteRefreshToken = (req, res) => {
   try {
-    const token = req.headers.refreshtoken;
+    const token = req.headers.accesstoken;
     const data = jwt.decode(token);
-    console.log(data);
     deleteUsersRefreshToken(data.id);
     return res.status(200).send('Token deleted');
   } catch (err) {
